@@ -1,0 +1,84 @@
+Default:
+  Predictor:
+    AlgorithmArn: arn:aws:forecast:::algorithm/AutoML
+    ForecastHorizon: 3
+    FeaturizationConfig:
+      ForecastFrequency: M
+      ForecastDimensions:
+        - "location"
+  Forecast:
+    ForecastTypes:
+      - "0.10"
+      - "0.50"
+      - "0.90"      
+
+Default_Backtest:
+  Predictor:
+    AlgorithmArn: arn:aws:forecast:::algorithm/AutoML
+    ForecastHorizon: 3
+    FeaturizationConfig:
+      ForecastFrequency: M
+      ForecastDimensions:
+        - "location"
+    EvaluationParameters:
+      NumberOfBacktestWindows: 5
+  Forecast:
+    ForecastTypes:
+      - "0.10"
+      - "0.25"
+      - "0.50"
+      - "0.70"
+      - "0.90"
+
+CNNQR_Backtest:
+  Predictor:
+    AlgorithmArn: arn:aws:forecast:::algorithm/CNN-QR
+    ForecastHorizon: 3
+    FeaturizationConfig:
+      ForecastFrequency: M
+      ForecastDimensions:
+        - "location"
+    EvaluationParameters:
+      NumberOfBacktestWindows: 5
+  Forecast:
+    ForecastTypes:
+      - "0.10"
+      - "0.25"
+      - "0.50"
+      - "0.70"
+      - "0.90"
+
+      
+DeepAr:
+  Predictor:
+    AlgorithmArn: arn:aws:forecast:::algorithm/Deep_AR_Plus
+    ForecastHorizon: 3
+    FeaturizationConfig:
+      ForecastFrequency: M
+      ForecastDimensions:
+        - "location"
+  Forecast:
+    ForecastTypes:
+      - "0.10"
+      - "0.25"
+      - "0.50"
+      - "0.70"
+      - "0.90"
+      
+DeepAr_Backtest:
+  Predictor:
+    AlgorithmArn: arn:aws:forecast:::algorithm/Deep_AR_Plus
+    ForecastHorizon: 3
+    FeaturizationConfig:
+      ForecastFrequency: M
+      ForecastDimensions:
+        - "location"
+    EvaluationParameters:
+      NumberOfBacktestWindows: 5
+  Forecast:
+    ForecastTypes:
+      - "0.10"
+      - "0.25"
+      - "0.50"
+      - "0.70"
+      - "0.90"

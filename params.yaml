@@ -1,0 +1,18 @@
+Params:
+  ExecutionType: DeepAr_Backtest
+  RTS_SCHEMA:
+    Attributes:
+    - AttributeName: item_id
+      AttributeType: string
+    - AttributeName: timestamp
+      AttributeType: timestamp
+    - AttributeName: price
+      AttributeType: float
+    - AttributeName: promotions
+      AttributeType: float
+    - AttributeName: location
+      AttributeType: string
+    - AttributeName: holiday_count
+      AttributeType: integer    
+    - AttributeName: avg_max_temp
+      AttributeType: float

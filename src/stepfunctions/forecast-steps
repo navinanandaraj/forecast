@@ -1,0 +1,118 @@
+{
+  "Comment": "Step Function to orchestrate generating forecasts with Amazon Forecast",
+  "StartAt": "DataPrep",
+  "States": {
+    "DataPrep": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:269511639055:function:forecast-dataprep",
+      "InputPath": "$.bucket_details",
+      "OutputPath": "$.dataset",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1
+        }
+      ],
+      "Next": "CreateDataset"
+    },
+    "CreateDataset": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:269511639055:function:create-dataset",
+      "InputPath": "$",
+      "OutputPath": "$.dataset_group",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "CreatePendingException"
+          ],
+          "IntervalSeconds": 300,
+          "MaxAttempts": 8,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1
+        }
+      ],
+      "Next": "CreatePredictor"
+    },
+    "CreatePredictor": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:269511639055:function:create-predictor",
+      "InputPath": "$",
+      "OutputPath": "$.predictor",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "CreatePendingException"
+          ],
+          "IntervalSeconds": 900,
+          "MaxAttempts": 20,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1
+        }
+      ],
+      "Next": "CreateForecast"
+    },
+    "CreateForecast": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:269511639055:function:create-forecast",
+      "InputPath": "$",
+      "OutputPath": "$.forecast",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "CreatePendingException"
+          ],
+          "IntervalSeconds": 900,
+          "MaxAttempts": 10,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1
+        }
+      ],
+      "Next": "ExportForecast"
+    },
+    "ExportForecast": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:269511639055:function:export-forecast",
+      "InputPath": "$",
+      "OutputPath": "$.export_forecast",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "CreatePendingException"
+          ],
+          "IntervalSeconds": 120,
+          "MaxAttempts": 10,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1
+        }
+      ],
+      "End": true
+    }
+  }
+}
